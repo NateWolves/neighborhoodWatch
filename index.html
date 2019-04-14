@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html lang= "en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width" device width, initial-scale =1>
+
+<title> Neighborhood Map App</title>
+
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Merriweather|Roboto+Condensed" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="./assets/style.css">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.8.0/firebase.js"></script>
+
+</head>
+
+
+<body>
+<div class= "fluid-container">      
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Neighborhood Map App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="message.html">Chat Room</a>
+        </li>
+      </ul>
+    </div>
+    <button type="button" id="signIn" class="btn btn-outline-primary">Sign In</button>
+    <button type="button" id="signOut" class="btn btn-outline-danger">Sign Out</button>
+  </nav>
+</div>
+<br>
+<br>
+<div class="container">
+  
+  <div class="row">
+      
+    <h3 class="card-title">Your in the <span id="currentZip"></span>!</h3>
+
+</div>
+  <div class="card">
+    
+        <div id="googleMap" style="width:100%;height:400px;">
+        
+        <p>google map goes here</p>
+        
+        </div>
+  </div>
+  <br>
+  <br>
+
+<div class="card search">
+  <div class="card-body">
+      <h3 class="card-title">Search for your neighborhood here!</h3>
+      <p class="card-text">Enter your zip code below to see whats happening in your area. Then click on the map to start leaving messages.</p>
+    <form>
+      <div class="form-group">
+        <label for="userAddress">Zip Code</label>
+        <input type="userZipCode" class="form-control" id="inputZip" placeholder="64105">
+      </div>
+        <button type="submit" id ="geocodeButton" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+<br>
+<br>
+</div>
+<!-- Modal to create markers-->
+<div class="modal fade" id="markerModal" tabindex="-1" role="dialog" aria-labelledby="markerModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="markerModalTitle">Place a Marker</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Select icons below...
+          <img src="assets/images/icons/bakery.svg" class="mapIcon">
+          <img src="assets/images/icons/bicycling.svg" class="mapIcon">
+          <img src="assets/images/icons/gym.svg" class="mapIcon">
+          <form>
+          <div class="form-group">
+              <label for="message-text" class="col-form-label">Message:</label>
+              <textarea class="form-control" id="message-text"></textarea>
+          </div>
+          </form>
+          <p>Select icon image below</p>
+          <div id="selectIcon">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="submitMarker" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create user name in local storage modal -->
+  <div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="signInModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="signInModalTitle">Create a user name</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          
+            <form>
+            <div class="form-group">
+                <label for="user-name" class="col-form-label">Username: </label>
+                <input class="form-control" id="userName"></input>
+            </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="submitUsername" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<footer>
+
+</footer>
+</body>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCV5fLzBC8q8GbS163UxAiHAZlcEHenxvI"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="./assets/javascript.js"></script>
+
+</html>

@@ -1,0 +1,37 @@
+
+body {
+    font-family: 'Merriweather', serif;
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: beige;
+    background-image: url("../assets/images/kcsky.jpg");
+}
+
+.container {
+    font-family: 'Merriweather', serif;
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: rgb(180,195,223, 0.1);
+}
+
+.search {
+    background-color: rgb(180,195,223, 0.5)
+}
+
+.map-icon-label .map-icon {
+	font-size: 24px;
+	color: #FFFFFF;
+	line-height: 48px;
+	text-align: center;
+	white-space: nowrap;
+}
+
+.show {
+    display: block;
+}
+.hide {
+    display: none;
+}
+
+.selected {
+    border: solid, yellow, 2px
+}
+

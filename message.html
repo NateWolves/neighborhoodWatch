@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<html lang= "en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width" device width, initial-scale =1>
+
+<title> message page</title>
+
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Merriweather|Roboto+Condensed" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="./assets/style.css">
+
+</head>
+
+            <!-- Bootstrap
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> -->
+            
+            <!-- Firebase Reference -->
+            <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+            
+            <!-- Moment.js Reference -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+            
+    </head>
+              
+
+            <body>
+                    <div class= "container">      
+                      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                        <a class="navbar-brand" href="#">KCCW</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                          <span class="navbar-toggler-icon"></span>
+                        </button>
+                    
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                          <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                              <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="message.html">Chat Room</a>
+                            </li>
+                          </ul>
+                        </div>
+                      </nav>
+                    
+                    <div class="jumbotron">
+        <form id="chat-form">
+                    <label for="chat-input">Add a chat, Yo!</label>
+                    <input type="text" id="chat-input"><br>
+                
+                    <!-- Button triggers new chat to be added -->
+                    <input id="add-chat" type="submit" value="Post">
+        </form>
+        <div id="chat"></div>
+        <script src="./assets/javascript.js"></script>
+        <script>
+            var config = {
+                authDomain: "https://rudimentary-chatroom.firebaseio.com/",
+                databaseURL: "https://rudimentary-chatroom.firebaseio.com/",
+            };
+
+          
+
+            firebase.initializeApp(config);
+
+            var chat;
+
+            var chatMessage;            
+
+            var database = firebase.database();
+
+            $("#add-chat").on("click", function(event) {
+                // event.preventDefault() prevents the form from trying to submit itself.
+                // We're using a form so that the user can hit enter instead of clicking the button if they want
+                event.preventDefault();
+
+                // This line will grab the text from the input box
+                chatMessage = $("#chat-input").val().trim();
+                chat.push(chatMessage);
+
+                if (chat.length > 10) {
+                    chat.shift();
+                }
+
+                database.ref().set({
+                    chat:chat
+                });
+            });
+            
+
+
+            console.log(database.val);
+
+            database.ref().on("value", function(snapshot) {
+
+                // Log everything that's coming out of snapshot
+                console.log(snapshot.val());
+                chat = snapshot.val().chat;
+                
+
+                $("#chat").html("<p>" + chat.join("</p><p>") + "</p>");
+
+                // Handle the errors
+            }, function(errorObject) {
+                console.log("Errors handled: " + errorObject.code);
+            });
+
+
+            
+
+            database.ref().set({
+                    chat:chat
+            });
+
+        </script>
+    </body>
+</html>
